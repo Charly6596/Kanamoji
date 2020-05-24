@@ -1,25 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { Text, Flex, Button, Stack, Input } from '@chakra-ui/core';
+import GameContainer from './containers/game'
 
 function App() {
+  const [] = useState(0);
+  const [input, setInput] = useState('');
+  const game = GameContainer.useContainer();
+
+  const onStartClick = () => game.start();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      game.sendAnswer(input);
+      setInput('');
+    }
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Flex
+      backgroundColor="#282c34"
+      minH="100vh"
+      justifyContent="center"
+      padding="10"
+    >
+      <Stack
+        width="80vw"
+      >
+
+        <Flex
+          height="30vmin"
+          borderRadius="20px"
+          backgroundColor="white"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Text>Learn hiragana</Text>
+          <Button variantColor="green" onClick={onStartClick}>Start</Button>
+          <Text>{game.question()}</Text>
+        </Flex>
+        <Flex
+          borderRadius="20px"
+          backgroundColor="white"
+          height="50vmin"
+        >
+          <Input
+            textAlign="center"
+            value={input}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+          />
+        </Flex>
+      </Stack>
+    </Flex>
   );
 }
 

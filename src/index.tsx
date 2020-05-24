@@ -3,10 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core';
+import GameContainer from './containers/game'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <ColorModeProvider>
+        <CSSReset />
+        <GameContainer.Provider>
+          <App />
+        </GameContainer.Provider>
+      </ColorModeProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
