@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import { Text, Flex, Button, Stack, Input } from '@chakra-ui/core';
 import GameContainer from './containers/game'
+import HiraganaTable from './components/hiragana-table';
 
 function App() {
-  const [] = useState(0);
   const [input, setInput] = useState('');
   const game = GameContainer.useContainer();
 
@@ -20,7 +20,6 @@ function App() {
       setInput('');
     }
   }
-
 
   return (
     <Flex
@@ -41,6 +40,7 @@ function App() {
           justifyContent="center"
           flexDirection="column"
         >
+          <HiraganaTable />
           <Text>Learn hiragana</Text>
           <Button variantColor="green" onClick={onStartClick}>Start</Button>
           <Text>{game.question()}</Text>

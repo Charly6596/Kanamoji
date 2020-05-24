@@ -5,15 +5,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core';
 import GameContainer from './containers/game'
+import ConfigContainer from './containers/configuration'
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider>
       <ColorModeProvider>
         <CSSReset />
-        <GameContainer.Provider>
-          <App />
-        </GameContainer.Provider>
+        <ConfigContainer.Provider>
+          <GameContainer.Provider>
+            <App />
+          </GameContainer.Provider>
+        </ConfigContainer.Provider>
       </ColorModeProvider>
     </ThemeProvider>
   </React.StrictMode>,

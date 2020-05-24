@@ -1,6 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useState } from 'react';
 import { GOJUON_MONO } from '../lib/kana-dict';
+import ConfigurationContainer from './configuration';
 import { isHiragana, isRomaji, toHiragana } from 'wanakana';
 
 interface Question {
@@ -16,6 +17,7 @@ interface Game {
 }
 
 function useGame() {
+    const config = ConfigurationContainer.useContainer();
     const [game, setGame] = useState<Game>(() => getInitialState())
 
     const start = () => startGame();
@@ -45,13 +47,17 @@ function useGame() {
     }
 
     function finishGame() {
-        console.log('Correct questions: ' + game.correct);
+        setGame({
+            ...game,
+            finishedOn: new Date()
+        })
     }
 
     function startGame() {
         const options = Object
         .values(GOJUON_MONO)
-        .map(i => Object.values(i))
+        .filter((h, i) => config.isEnabled(i))
+        .map(h => Object.values(h))
         .flat();
 
         setGame({
