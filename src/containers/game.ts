@@ -16,6 +16,25 @@ interface Game {
     correct: number;
 }
 
+// https://bost.ocks.org/mike/shuffle/
+function shuffle(array: any[]) {
+  var m = array.length, t, i;
+
+  // While there remain elements to shuffle…
+  while (m) {
+
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
+
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+}
+
 function useGame() {
     const config = ConfigurationContainer.useContainer();
     const [game, setGame] = useState<Game>(() => getInitialState())
@@ -51,14 +70,19 @@ function useGame() {
             ...game,
             finishedOn: new Date()
         })
+        console.log(game);
     }
 
     function startGame() {
-        const options = Object
+        let options = Object
         .values(GOJUON_MONO)
         .filter((h, i) => config.isEnabled(i))
         .map(h => Object.values(h))
         .flat();
+
+        options = shuffle(options);
+
+        
 
         setGame({
             startedOn: new Date(),
