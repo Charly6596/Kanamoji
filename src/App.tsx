@@ -1,64 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { Text, Flex, Button, Stack, Input } from '@chakra-ui/core';
-import GameContainer from './containers/game'
-import HiraganaTable from './components/hiragana-table';
+import { Text, Stack, Box } from '@chakra-ui/core';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ROUTES } from './constants/routes';
+import HomePage from './pages/home-page';
+import GamePage from './pages/game-page';
 
 function App() {
-  const [input, setInput] = useState('');
-  const game = GameContainer.useContainer();
-
-  const onStartClick = () => game.start();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      game.sendAnswer(input);
-      setInput('');
-    }
-  }
-
   return (
-    <Flex
+    <Stack
       backgroundColor="#282c34"
       minH="100vh"
-      justifyContent="center"
-      padding="10"
+      paddingX="20%"
     >
+      <Box textAlign="center">
+        <Text color="white" fontWeight="bold" fontSize="5rem">仮名文字</Text>
+      </Box>
       <Stack
-        width="80vw"
+        backgroundColor="white"
+        paddingY={5}
+        borderRadius="20px"
+        alignItems="center"
+        spacing={5}
       >
+        <BrowserRouter>
+          <Switch>
+            <Route exact path={ROUTES.GAME}>
+              <GamePage />
+           </Route>
+            <Route exact path={ROUTES.HOME}>
+              <HomePage />
+            </Route>
+          </Switch>
+        </BrowserRouter>
 
-        <Flex
-          height="30vmin"
-          borderRadius="20px"
-          backgroundColor="white"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <HiraganaTable />
-          <Text>Learn hiragana</Text>
-          <Button variantColor="green" onClick={onStartClick}>Start</Button>
-          <Text>{game.question()}</Text>
-        </Flex>
-        <Flex
-          borderRadius="20px"
-          backgroundColor="white"
-          height="50vmin"
-        >
-          <Input
-            textAlign="center"
-            value={input}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-        </Flex>
       </Stack>
-    </Flex>
+    </Stack>
   );
 }
 

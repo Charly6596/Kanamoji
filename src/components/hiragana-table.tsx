@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { GOJUON_MONO } from '../lib/kana-dict';
 import { Flex, Text, Checkbox, Box } from '@chakra-ui/core';
 import ConfigurationContainer from '../containers/configuration'
@@ -12,18 +12,17 @@ function HiraganaTable() {
     e.target.checked ? config.add(value) : config.remove(value);
   }
 
-
   const renderHiragana = () =>
     Object
       .values(GOJUON_MONO)
       .map((v, i) =>
 
-        <Flex alignItems="center" flexDir="column" key={i}>
-          <Checkbox value={i} onChange={onCheckboxChange} isChecked={config.isEnabled(i)} />
+        <Flex marginX={3} alignItems="center" flexDir="column" key={i}>
+          <Checkbox value={i} size='lg' variantColor="green" onChange={onCheckboxChange} isChecked={config.isEnabled(i)} />
           {
             Object.values(v).map(v =>
               <Box p={1}>
-                <Text key={v}>{v}</Text>
+                <Text fontSize="3em" key={v}>{v}</Text>
               </Box>
             )
           }
