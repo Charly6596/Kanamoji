@@ -1,6 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useState, useEffect } from 'react';
 import { Game } from '../model/Game';
+import { GOJUON_MONO } from '../lib/kana-dict';
 
 
 interface GameStat {
@@ -32,7 +33,7 @@ function getDefaultHiragana(char: string, correct: boolean): HiraganaStat {
     total: 1,
     character: char
   }
-} 
+}
 
 const gameKey = 'game_stats';
 const hiraganaKey = 'hiragana_stats';
@@ -63,9 +64,9 @@ function useStats() {
 
   const addHiragana = (hiragana: string, correct: boolean) => {
     const index = hiraganaStats.findIndex(h => h.character === hiragana);
-    if(index === -1) {
+    if (index === -1) {
       const stat = getDefaultHiragana(hiragana, correct);
-      setHiraganaStats(s => { 
+      setHiraganaStats(s => {
         s.push(stat);
         return Array.from(s);
       });
@@ -86,8 +87,38 @@ function useStats() {
 
   const getHiraganaStats = () => hiraganaStats;
 
+  const getWorstHiragana = () => {
+    return hiraganaStats.reduce((p, v) => {
+      return (p.correct / p.total < v.correct / v.total ? p : v);
+    })
+  }
+
+  const getBestHiragana = () => {
+    return hiraganaStats.reduce((p, v) => {
+      return (p.correct / p.total > v.correct / v.total ? p : v);
+    })
+  }
+
+  const getBestRow = () => {
+    let count: any[] = []
+
+    const res = Object.values(GOJUON_MONO).forEach((v, i) => {
+      hiraganaStats.forEach(h => {
+        if (Object.values(v).includes(h.character)) {
+          const total = count[i]?.total;
+          const correct = count[i]?.correct;
+          count[i] = {
+            correct: isNaN(correct) ? h.correct: correct + h.correct,
+            total: isNaN(total) ? h.total: total + h.total
+          }
+        }
+      })
+    });
+    console.log(count);
+  }
+
   const get = () => gameStats;
 
-  return { add, get, addHiragana, getHiraganaStats };
+  return { add, get, addHiragana, getHiraganaStats, getBestHiragana, getWorstHiragana, getBestRow };
 }
 export default createContainer(useStats);
