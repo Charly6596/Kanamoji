@@ -11,6 +11,7 @@ import StatsContainer from '../containers/stats'
 import GameInput from '../components/game-input';
 
 const initialState: Game = {
+  startedOn: new Date(),
   questions: [],
   currentQuestion: 0,
   correct: 0
@@ -35,9 +36,11 @@ function shuffle(array: any[]) {
   return array;
 }
 
-function answer(input: string, game: Game): Game {
+function answer(input: string, game: Game, stats: any): Game {
   const hiragana = isHiragana(input) ? input : toHiragana(input);
   const correct = hiragana === game.questions[game.currentQuestion];
+
+  stats.addHiragana(game.questions[game.currentQuestion], correct);
 
   if (game.currentQuestion < game.questions.length) {
     return {
@@ -79,8 +82,8 @@ function startGame(cols: Set<number>): Game {
 
 interface Action {
   type: GAME_ACTIONS;
-  config?: any;
   payload?: any;
+  stats?: any;
 }
 
 type GAME_ACTIONS =
@@ -94,10 +97,10 @@ function reducer(state: Game, action: Action): Game {
     case "START_GAME":
       return startGame(action.payload);
     case "SEND_ANSWER":
-      return answer(action.payload, state);
+      return answer(action.payload, state, action.stats);
     case "FINISH_GAME":
       const res = finishGame(state);
-      action.payload.add(res);
+      action.stats.add(res);
       return res;
     default:
       return initialState;
@@ -114,14 +117,15 @@ const START_GAME = (cols: Set<number>): Action => {
 const FINISH_GAME = (stats: any): Action => {
   return {
     type: "FINISH_GAME",
-    payload: stats
+    stats: stats
   }
 }
 
-const SEND_ANSWER = (input: string): Action => {
+const SEND_ANSWER = (input: string, stats: any): Action => {
   return {
     type: "SEND_ANSWER",
-    payload: input
+    payload: input,
+    stats: stats
   }
 }
 
@@ -142,7 +146,7 @@ function GamePage() {
 
   const onAnswer = useCallback(
     (answer: string) => {
-      dispatch(SEND_ANSWER(answer));
+      dispatch(SEND_ANSWER(answer, stats));
     },
     [dispatch],
   );

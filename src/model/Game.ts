@@ -1,5 +1,5 @@
 export interface Game {
-    startedOn?: Date;
+    startedOn: Date;
     finishedOn?: Date;
     questions: string[];
     currentQuestion: number;

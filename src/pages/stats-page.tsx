@@ -10,6 +10,7 @@ function StatsPage() {
   const printStats = () => {
     return <pre>
       {JSON.stringify(stats.get(), null, 2)}
+      {JSON.stringify(stats.getHiraganaStats(), null, 2)}
     </pre>
   }
 
