@@ -1,71 +1,183 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { Box, Text, Button, Input, Stack } from '@chakra-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useCallback, useEffect, useReducer } from 'react'
+import { Box, Text, Button, Stack } from '@chakra-ui/core';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
-import GameContainer from '../containers/game';
 import CurrentMark from '../components/current-mark';
+import { Game } from '../model/Game';
+import { GOJUON_MONO } from '../lib/kana-dict';
+import { isHiragana, toHiragana } from 'wanakana';
+import ConfigurationContainer from '../containers/configuration';
+import StatsContainer from '../containers/stats'
+import GameInput from '../components/game-input';
+
+const initialState: Game = {
+  questions: [],
+  currentQuestion: 0,
+  correct: 0
+}
+
+// https://bost.ocks.org/mike/shuffle/
+function shuffle(array: any[]) {
+  var m = array.length, t, i;
+
+  // While there remain elements to shuffle…
+  while (m) {
+
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
+
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+}
+
+function answer(input: string, game: Game): Game {
+  const hiragana = isHiragana(input) ? input : toHiragana(input);
+  const correct = hiragana === game.questions[game.currentQuestion];
+
+  if (game.currentQuestion < game.questions.length) {
+    return {
+      ...game,
+      currentQuestion: game.currentQuestion + 1,
+      correct: correct ? game.correct + 1 : game.correct,
+    };
+  }
+
+  return {
+    ...game,
+    correct: correct ? game.correct + 1 : game.correct,
+  }
+}
+
+function finishGame(game: Game): Game {
+  return {
+    ...game,
+    finishedOn: new Date()
+  };
+}
+
+function startGame(cols: Set<number>): Game {
+  let options = Object
+    .values(GOJUON_MONO)
+    .filter((h, i) => cols.has(i))
+    .map(h => Object.values(h))
+    .flat();
+
+  options = shuffle(options);
+
+  return {
+    startedOn: new Date(),
+    questions: options,
+    currentQuestion: 0,
+    correct: 0
+  };
+}
+
+interface Action {
+  type: GAME_ACTIONS;
+  config?: any;
+  payload?: any;
+}
+
+type GAME_ACTIONS =
+  "START_GAME" |
+  "FINISH_GAME" |
+  "SEND_ANSWER";
+
+function reducer(state: Game, action: Action): Game {
+
+  switch (action.type) {
+    case "START_GAME":
+      return startGame(action.payload);
+    case "SEND_ANSWER":
+      return answer(action.payload, state);
+    case "FINISH_GAME":
+      const res = finishGame(state);
+      action.payload.add(res);
+      return res;
+    default:
+      return initialState;
+  }
+}
+
+const START_GAME = (cols: Set<number>): Action => {
+  return {
+    type: "START_GAME",
+    payload: cols
+  }
+}
+
+const FINISH_GAME = (stats: any): Action => {
+  return {
+    type: "FINISH_GAME",
+    payload: stats
+  }
+}
+
+const SEND_ANSWER = (input: string): Action => {
+  return {
+    type: "SEND_ANSWER",
+    payload: input
+  }
+}
 
 function GamePage() {
-  const game = GameContainer.useContainer();
-  const [input, setInput] = useState('');
+  const config = ConfigurationContainer.useContainer();
+  const stats = StatsContainer.useContainer();
+  const [game, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    game.start();
-    return () => {
-      if (!game.finished()) {
-        game.stop()
-
-      }
-    }
+    dispatch(START_GAME(config.get()));
   }, [])
 
-  const onInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)
-    ,[]
-  )
+  useEffect(() => {
+    if (game.questions.length !== 0 && game.currentQuestion >= game.questions.length) {
+      dispatch(FINISH_GAME(stats));
+    }
+  }, [game.currentQuestion, game.questions, dispatch, stats])
 
-  const onInputKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        game.sendAnswer(input);
-        setInput('');
+  const onAnswer = useCallback(
+    (answer: string) => {
+      dispatch(SEND_ANSWER(answer));
+    },
+    [dispatch],
+  );
+
+  const printStartButton = useCallback(
+    () => {
+      if (game.finishedOn !== undefined) {
+        return <Redirect to={ROUTES.STATS} />
       }
     },
-    [input],
-  )
+    [game.finishedOn],
+  );
 
-  const printStartButton = 
-    () => {
-      if (game.game.state === 'GAME_STARTED') {
-        return <Button variantColor="green">Start game</Button>
-      }
-      else {
-        return <Text>Game finished</Text>
-      }
-    }
+return (
+  <Stack spacing={4} justify="center">
+    <CurrentMark correct={game.correct} amount={game.questions.length} />
+    <Box textAlign="center">
+      <Text fontSize="5rem">{game.questions[game.currentQuestion]}</Text>
+    </Box>
+    <Box>
+      <GameInput onAnswer={onAnswer} />
+    </Box>
+    <Stack
+      isInline
+      spacing={10}
+      justify="center"
 
-  return (
-    <Stack spacing={4} justify="center">
-      <CurrentMark correct={game.currentMark().correct} amount={game.currentMark().amount}/>
-      <Box textAlign="center">
-        <Text fontSize="5rem">{game.question()}</Text>
-      </Box>
-      <Box>
-        <Input placeholder="Enter your answer..." value={input} onChange={onInputChange} onKeyDown={onInputKeyDown} />
-      </Box>
-      <Stack
-        isInline
-        spacing={10}
-        justify="center"
-
-      >
-        {printStartButton()}
-        <RouterLink to={ROUTES.HOME}>
-          <Button variantColor="green">Leave game</Button>
-        </RouterLink>
-      </Stack>
+    >
+      {printStartButton()}
+      <RouterLink to={ROUTES.HOME}>
+        <Button variantColor="green">Leave game</Button>
+      </RouterLink>
     </Stack>
-  )
+  </Stack>
+)
 }
 
 export default GamePage

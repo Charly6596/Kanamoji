@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core';
-import GameContainer from './containers/game'
+import StatsContainer from './containers/stats'
 import ConfigContainer from './containers/configuration'
 
 ReactDOM.render(
@@ -13,9 +13,9 @@ ReactDOM.render(
       <ColorModeProvider>
         <CSSReset />
         <ConfigContainer.Provider>
-          <GameContainer.Provider>
+          <StatsContainer.Provider>
             <App />
-          </GameContainer.Provider>
+          </StatsContainer.Provider>
         </ConfigContainer.Provider>
       </ColorModeProvider>
     </ThemeProvider>

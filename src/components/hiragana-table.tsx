@@ -4,7 +4,6 @@ import { Flex, Text, Checkbox, Box } from '@chakra-ui/core';
 import ConfigurationContainer from '../containers/configuration'
 
 function HiraganaTable() {
-
   const config = ConfigurationContainer.useContainer();
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,8 +20,8 @@ function HiraganaTable() {
           <Checkbox value={i} size='lg' variantColor="green" onChange={onCheckboxChange} isChecked={config.isEnabled(i)} />
           {
             Object.values(v).map(v =>
-              <Box p={1}>
-                <Text fontSize="3em" key={v}>{v}</Text>
+              <Box p={1} key={v}>
+                <Text fontSize="3em">{v}</Text>
               </Box>
             )
           }
@@ -34,7 +33,6 @@ function HiraganaTable() {
       { renderHiragana() }
     </Flex>
   )
-
 }
 
 export default HiraganaTable

@@ -37,7 +37,9 @@ function useConfiguration() {
     return config.has(col);
   }
 
-  return { add, remove, isEnabled }
+  const get = () => config
+
+  return { add, remove, isEnabled, get }
 }
 
 export default createContainer(useConfiguration);
