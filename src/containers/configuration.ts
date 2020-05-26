@@ -42,4 +42,5 @@ function useConfiguration() {
   return { add, remove, isEnabled, get }
 }
 
-export default createContainer(useConfiguration);
+export const ConfigContainer = createContainer(useConfiguration);
+

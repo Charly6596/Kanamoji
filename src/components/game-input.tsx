@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Input } from '@chakra-ui/core';
+import { GameContainer } from '../containers/game';
 
-interface Props {
-  onAnswer: (answer: string) => void
-}
-
-const GameInput = React.memo<Props>(({ onAnswer }) => {
+const GameInput = React.memo(() => {
   const [input, setInput] = useState('')
   const inputRef = useRef<any>();
+  const game = GameContainer.useContainer();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -15,25 +13,23 @@ const GameInput = React.memo<Props>(({ onAnswer }) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onAnswer(input);
+    game.answer(input);
     setInput('');
   }
 
   return (
-    <div>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <Input 
+    <form onSubmit={(e) => onSubmit(e)}>
+      <Input
         fontSize="2em"
         ref={inputRef}
-        placeholder="Enter your answer..." 
-        value={input} 
-        border={0} 
+        placeholder="Enter your answer..."
+        value={input}
+        border={0}
         textAlign="center"
         focusBorderColor="transparent"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)} 
-        />
-      </form>
-    </div>
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+      />
+    </form>
   )
 });
 

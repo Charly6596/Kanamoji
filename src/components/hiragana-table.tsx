@@ -1,10 +1,10 @@
 import React from 'react'
 import { GOJUON_MONO } from '../lib/kana-dict';
 import { Flex, Text, Checkbox, Box } from '@chakra-ui/core';
-import ConfigurationContainer from '../containers/configuration'
+import { ConfigContainer } from '../containers/configuration';
 
 function HiraganaTable() {
-  const config = ConfigurationContainer.useContainer();
+  const config = ConfigContainer.useContainer();
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number.parseInt(e.target.value);
@@ -15,7 +15,6 @@ function HiraganaTable() {
     Object
       .values(GOJUON_MONO)
       .map((v, i) =>
-
         <Flex marginX={3} alignItems="center" flexDir="column" key={i}>
           <Checkbox value={i} size='lg' variantColor="green" onChange={onCheckboxChange} isChecked={config.isEnabled(i)} />
           {

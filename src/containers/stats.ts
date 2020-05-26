@@ -121,4 +121,5 @@ function useStats() {
 
   return { add, get, addHiragana, getHiraganaStats, getBestHiragana, getWorstHiragana, getBestRow };
 }
-export default createContainer(useStats);
+
+export const StatsContainer = createContainer(useStats);
