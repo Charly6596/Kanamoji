@@ -33,6 +33,10 @@ export const KanaCheckboxBox: React.FC<Props> = ({ children }) => {
   return (
     <Flex width='100%' justifyContent='center' alignContent='center'>
       {renderChildren}
-      <Checkbox onChange={() => config.toggleAll(ids)} isChecked={config.areEnabled(ids)} />
+      <Checkbox 
+      hidden
+      onChange={() => config.toggleAll(ids)} 
+      isChecked={config.areEnabled(ids)} 
+      />
     </Flex>)
 }

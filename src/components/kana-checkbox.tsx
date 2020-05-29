@@ -1,32 +1,34 @@
 import { Kana } from "../lib/kana-dict";
-import { CheckboxProps, Text, Checkbox, Box, Stack } from "@chakra-ui/core";
+import { CheckboxProps, Text, Box, PseudoBox } from "@chakra-ui/core";
 import React from "react";
 
 export interface KanaCheckboxProps {
   kana: Kana;
 }
 
+const width = ['1.75em', '3em'];
 export const KanaCheckbox = ({ kana, onClick, isChecked }: CheckboxProps & KanaCheckboxProps) => {
   return (
-    <Stack
+
+    <PseudoBox
       onClick={onClick}
+      bg={isChecked ? "teal.50" : "white"}
+      color={isChecked ? "teal.200": "white"}
       as="button"
-      background={isChecked ? "green" : "white"}
+      border="1px"
       margin='0.1rem'
-      borderRadius='4px'
-      alignItems='center'
-      spacing={0.5}
+      rounded={4}
     >
-      <Text fontSize="2em" width='1.5em'>{kana.char}</Text>
-      <Text>{kana.romaji}</Text>
-    </Stack>
+      <Text color="black" fontSize={["2em", "2.75em"]} width={width}>{kana.char}</Text>
+      <Text color="gray.500">{kana.romaji}</Text>
+    </PseudoBox>
   );
 }
 export const EmptyCheckbox = () => {
   return (
     <Box
-    margin='0.1rem'
-    padding='1.5em'
+    margin='0.1em'
+    paddingX={['1.81em', '4.05em']}
     borderRadius='4px'
     />
 

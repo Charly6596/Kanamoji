@@ -12,15 +12,15 @@ function App() {
     <Stack
       backgroundColor="#282c34"
       minH="100vh"
-      paddingX="20%"
+      paddingX={['0', '0', '20%']}
     >
       <Box textAlign="center">
         <Text color="white" fontWeight="bold" fontSize="5rem">仮名文字</Text>
       </Box>
       <Stack
-        backgroundColor="white"
+        backgroundColor="gray.200"
         paddingY={5}
-        borderRadius="20px"
+        borderRadius={['0', '0', '20px']}
         alignItems="center"
         spacing={5}
       >

@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core';
+import { ThemeProvider, CSSReset, ColorModeProvider, theme } from '@chakra-ui/core';
 import { ConfigContainer } from './containers/configuration';
 import { StatsContainer } from './containers/stats';
 import { GameContainer } from './containers/game';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <ColorModeProvider>
+    <ThemeProvider theme={theme}>
         <CSSReset />
         <ConfigContainer.Provider>
           <StatsContainer.Provider>
@@ -20,7 +19,6 @@ ReactDOM.render(
             </GameContainer.Provider>
           </StatsContainer.Provider>
         </ConfigContainer.Provider>
-      </ColorModeProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
