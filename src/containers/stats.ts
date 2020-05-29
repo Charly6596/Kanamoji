@@ -1,8 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useState, useEffect } from 'react';
 import { Game } from '../model/Game';
-import { GOJUON_MONO } from '../lib/kana-dict';
-
+import { Kana } from '../lib/kana-dict';
 
 interface GameStat {
   correct: number;
@@ -11,14 +10,14 @@ interface GameStat {
   finishedOn?: Date;
 }
 
-interface HiraganaStat {
-  correct: number;
-  total: number;
-  character: string;
+interface KanaStat {
+  kanaId: number;
+  timesCorrect: number;
+  totalTimes: number;
+  lastSeen: Date;
 }
 
 function getByKey(key: string) {
-  console.log(key);
   const json = localStorage.getItem(key);
   if (json) {
     const res = JSON.parse(json);
@@ -27,26 +26,41 @@ function getByKey(key: string) {
   return [];
 }
 
-function getDefaultHiragana(char: string, correct: boolean): HiraganaStat {
+function getDefaultKana(id: number): KanaStat {
   return {
-    correct: correct ? 1 : 0,
-    total: 1,
-    character: char
+    timesCorrect: 0,
+    totalTimes: 0,
+    lastSeen: new Date(),
+    kanaId: id,
   }
 }
 
+function getDefaultKanaStats(): KanaStat[] {
+  const kanaStats = [];
+  for (let i = 0; i <= KANA_AMOUNT; i++) {
+    kanaStats[i] = getDefaultKana(i);
+  }
+
+  return kanaStats;
+}
+
 const gameKey = 'game_stats';
-const hiraganaKey = 'hiragana_stats';
+const kanaKey = 'kana_stats';
+const KANA_AMOUNT = 142;
 
 function useStats() {
   const [gameStats, setGameStats] = useState<GameStat[]>(() => getByKey(gameKey))
 
-  const [hiraganaStats, setHiraganaStats] = useState<HiraganaStat[]>(() => getByKey(hiraganaKey));
+  const [kanaStats, setKanaStats] = useState<KanaStat[]>(() => getByKey(kanaKey));
 
   useEffect(() => {
-    console.log('save');
-    localStorage.setItem(hiraganaKey, JSON.stringify(hiraganaStats));
-  }, [hiraganaStats])
+    if (kanaStats.length < KANA_AMOUNT) {
+      setKanaStats(getDefaultKanaStats());
+    }
+    else {
+      localStorage.setItem(kanaKey, JSON.stringify(kanaStats));
+    }
+  }, [kanaStats])
 
   useEffect(() => {
     localStorage.setItem(gameKey, JSON.stringify(gameStats));
@@ -62,64 +76,40 @@ function useStats() {
     setGameStats(games => [...games, stat]);
   }
 
-  const addHiragana = (hiragana: string, correct: boolean) => {
-    const index = hiraganaStats.findIndex(h => h.character === hiragana);
-    if (index === -1) {
-      const stat = getDefaultHiragana(hiragana, correct);
-      setHiraganaStats(s => {
-        s.push(stat);
-        return Array.from(s);
-      });
-    }
-    else {
-      const stat = hiraganaStats[index];
-      setHiraganaStats(s => {
-        console.log(s);
-        s[index] = {
-          ...stat,
-          total: stat.total + 1,
-          correct: correct ? stat.correct + 1 : stat.correct
-        }
-        return Array.from(s);
-      });
-    }
+  const addKana = (kana: Kana, correct: boolean) => {
+    setKanaStats(ks => {
+      const s = ks.find(s => s?.kanaId === kana.id) ?? getDefaultKana(kana.id);
+      const arr = Array.from(ks);
+      arr[kana.id] = {
+        ...s,
+        lastSeen: new Date(),
+        timesCorrect: correct ? s.timesCorrect + 1 : s.timesCorrect,
+        totalTimes: s.totalTimes + 1
+      };
+      return arr;
+    });
   }
 
-  const getHiraganaStats = () => hiraganaStats;
-
   const getWorstHiragana = () => {
-    return hiraganaStats.reduce((p, v) => {
-      return (p.correct / p.total < v.correct / v.total ? p : v);
+    return kanaStats.reduce((p, v) => {
+      if(v.totalTimes === 0 ) return p;
+      return (p.timesCorrect / p.totalTimes < v.timesCorrect / v.totalTimes ? p : v);
     })
   }
 
   const getBestHiragana = () => {
-    return hiraganaStats.reduce((p, v) => {
-      return (p.correct / p.total > v.correct / v.total ? p : v);
+    return kanaStats.reduce((p, v) => {
+      if(v.totalTimes === 0 ) return p;
+      return (p.timesCorrect / p.totalTimes > v.timesCorrect / v.totalTimes ? p : v);
     })
   }
 
   const getBestRow = () => {
-    let count: any[] = []
-
-    const res = Object.values(GOJUON_MONO).forEach((v, i) => {
-      hiraganaStats.forEach(h => {
-        if (Object.values(v).includes(h.character)) {
-          const total = count[i]?.total;
-          const correct = count[i]?.correct;
-          count[i] = {
-            correct: isNaN(correct) ? h.correct: correct + h.correct,
-            total: isNaN(total) ? h.total: total + h.total
-          }
-        }
-      })
-    });
-    console.log(count);
   }
 
   const get = () => gameStats;
 
-  return { add, get, addHiragana, getHiraganaStats, getBestHiragana, getWorstHiragana, getBestRow };
+  return { add, get, addKana, kanaStats, getBestHiragana, getWorstHiragana, getBestRow };
 }
 
 export const StatsContainer = createContainer(useStats);

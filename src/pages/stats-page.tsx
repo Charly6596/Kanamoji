@@ -3,23 +3,26 @@ import { Box, Text, Button, Stack, Flex } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
 import { StatsContainer } from '../containers/stats';
+import { useKana } from '../lib/kana-dict';
 
 function StatsPage() {
   const stats = StatsContainer.useContainer();
-  stats.getBestRow();
+  const worst = stats.getWorstHiragana();
+  const best = stats.getBestHiragana();
+  const kanaDict = useKana();
 
   return (
     <Stack align="center" padding={10}>
       <Flex wrap="wrap">
         <Box textAlign="center">
-          <Text fontSize="2rem">Worst character</Text>
-          <Text fontSize="5em">{stats.getWorstHiragana().character}</Text>
-          <Text>Ratio: {stats.getWorstHiragana().correct / stats.getWorstHiragana().total}</Text>
+          <Text fontSize="2rem">Best character</Text>
+          <Text fontSize="5em">{kanaDict.Kana[best.kanaId].char}</Text>
+          <Text>Ratio: {best.timesCorrect / best.totalTimes}</Text>
         </Box>
         <Box textAlign="center">
           <Text fontSize="2rem">Worst character</Text>
-          <Text fontSize="5em">{stats.getBestHiragana().character}</Text>
-          <Text>Ratio: {stats.getBestHiragana().correct / stats.getBestHiragana().total}</Text>
+          <Text fontSize="5em">{kanaDict.getById(worst.kanaId)?.char ?? "None yet"}</Text>
+          <Text>Ratio: {worst.timesCorrect / worst.totalTimes}</Text>
         </Box>
         <Box>
           <Text fontSize="2rem">Worst character</Text>

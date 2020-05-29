@@ -21,25 +21,42 @@ function useConfiguration() {
     }
   }, [config])
 
+  const enableKanas = (ids: number[]) => {
+    setConfig(c => {
+      ids.forEach(id => c.add(id));
+      return new Set(c);
+    })
+  }
 
-  const add = (col: number) => {
-    config.add(col);
+  const deleteKanas = (ids: number[]) => {
+    ids.forEach(id => config.delete(id));
     setConfig(new Set(config));
   }
 
-  const remove = (col: number) => {
-    if (config.delete(col)) {
-      setConfig(new Set(config));
+  const toggleAll = (ids: number[]) => {
+    if (ids.every(i => isEnabled(i))) {
+      deleteKanas(ids);
+    }
+    else {
+      enableKanas(ids);
     }
   }
 
-  const isEnabled = (col: number) => {
-    return config.has(col);
+  const toggleKana = (id: number) => {
+    if (config.delete(id)) {
+    }
+    else {
+      config.add(id);
+    }
+    setConfig(new Set(config))
   }
+
+  const isEnabled = (id: number) => config.has(id);
+  const areEnabled = (ids: number[]) => ids.every(id => isEnabled(id));
 
   const get = () => config
 
-  return { add, remove, isEnabled, get }
+  return { isEnabled, areEnabled, get, toggleKana, toggleAll, deleteKanas, enableKanas }
 }
 
 export const ConfigContainer = createContainer(useConfiguration);

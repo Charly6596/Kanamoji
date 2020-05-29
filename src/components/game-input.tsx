@@ -7,8 +7,11 @@ const GameInput = React.memo(() => {
   const inputRef = useRef<any>();
   const game = GameContainer.useContainer();
 
+  game.onError.current = () => {
+  };
+
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }, [inputRef])
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
