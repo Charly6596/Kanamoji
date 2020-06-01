@@ -6,4 +6,5 @@ export interface Game {
     questions: Kana[];
     currentQuestion: number;
     correct: number;
+    finished: boolean
 }

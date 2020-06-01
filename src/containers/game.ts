@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Game } from "../model/Game";
 import { ConfigContainer } from "./configuration";
 import { StatsContainer } from "./stats";
@@ -10,7 +10,8 @@ const initialState: Game = {
   startedOn: new Date(),
   questions: [],
   currentQuestion: 0,
-  correct: 0
+  correct: 0,
+  finished: false
 }
 
 function useGame() {
@@ -25,6 +26,7 @@ function useGame() {
   };
 
   const answer = (input: string) => {
+    if(!input || input.length === 0) { return; }
     setGame(g => {
       const correct = isCorrect(input, g);
       if (!correct) {
@@ -36,10 +38,21 @@ function useGame() {
   };
 
   const finish = () => {
-    setGame(g => finishGame(g))
+    setGame(g => {
+      const game = finishGame(g);
+      stats.add(game);
+      return game;
+    });
   };
 
-  return { start, answer, finish, onError, ...game }
+  useEffect(() => {
+    if(game.finished && game.currentQuestion === game.questions.length && !game.finishedOn) {
+      finish()
+    }
+  }, [finish, game])
+
+
+  return { start, answer, onError, ...game }
 }
 
 export const GameContainer = createContainer(useGame);
@@ -65,10 +78,12 @@ function shuffle(array: any[]) {
 
 function answerQuestion(correct: boolean, game: Game): Game {
   if (game.currentQuestion < game.questions.length) {
+    const finished = game.currentQuestion === game.questions.length - 1;
     return {
       ...game,
-      currentQuestion: game.currentQuestion + 1,
+      currentQuestion: finished ? game.currentQuestion : game.currentQuestion + 1,
       correct: correct ? game.correct + 1 : game.correct,
+      finished: finished
     };
   }
 
@@ -99,6 +114,7 @@ function startGame(ids: Set<number>, kana: readonly Kana[]): Game {
     startedOn: new Date(),
     questions: options,
     currentQuestion: 0,
-    correct: 0
+    correct: 0,
+    finished: false
   };
 }

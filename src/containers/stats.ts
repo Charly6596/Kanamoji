@@ -73,7 +73,7 @@ function useStats() {
       startOn: game.startedOn,
       finishedOn: game.finishedOn
     }
-    setGameStats(games => [...games, stat]);
+    setGameStats([...gameStats, stat]);
   }
 
   const addKana = (kana: Kana, correct: boolean) => {
