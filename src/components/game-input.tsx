@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Input } from '@chakra-ui/core';
+import { Input, Box } from '@chakra-ui/core';
 import { GameContainer } from '../containers/game';
 
 const GameInput = React.memo(() => {
@@ -21,18 +21,22 @@ const GameInput = React.memo(() => {
   }
 
   return (
-    <form onSubmit={(e) => onSubmit(e)}>
-      <Input
-        fontSize="2em"
-        ref={inputRef}
-        placeholder="Enter your answer..."
-        value={input}
-        border={0}
-        textAlign="center"
-        focusBorderColor="transparent"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
-      />
-    </form>
+    <Box position={['relative']} bottom='0' width='100%'>
+      <form onSubmit={(e) => onSubmit(e)}>
+        <Input
+          background="gray.200"
+          fontSize="1.5em"
+          ref={inputRef}
+          placeholder="Enter your answer..."
+          value={input}
+          border={0}
+          borderRadius={0}
+          textAlign="center"
+          focusBorderColor="transparent"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+        />
+      </form>
+    </Box>
   )
 });
 

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Game } from "../model/Game";
 import { ConfigContainer } from "./configuration";
 import { StatsContainer } from "./stats";
-import { isHiragana, toHiragana } from "wanakana";
+import { isHiragana, toHiragana, toKatakana, isKana } from "wanakana";
 import { useKana, Kana } from "../lib/kana-dict";
 import { createContainer } from "unstated-next";
 
@@ -94,8 +94,17 @@ function answerQuestion(correct: boolean, game: Game): Game {
 }
 
 function isCorrect(input: string, game: Game) {
-  const hiragana = isHiragana(input) ? input : toHiragana(input);
-  return hiragana === game.questions[game.currentQuestion].char;
+  const q = game.questions[game.currentQuestion];
+  let answerKana;
+  if(isKana(input))
+  {
+    answerKana = input;
+  }
+  else {
+    answerKana = q.shape === "hiragana" ? toHiragana(input) : toKatakana(input);
+  }
+
+  return answerKana === game.questions[game.currentQuestion].char;
 }
 
 function finishGame(game: Game): Game {

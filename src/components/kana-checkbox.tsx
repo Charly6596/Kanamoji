@@ -26,11 +26,13 @@ export const KanaCheckbox = ({ kana, onClick, isChecked }: CheckboxProps & KanaC
 }
 export const EmptyCheckbox = () => {
   return (
-    <Box
-    margin='0.1em'
-    paddingX={['1.81em', '4.05em']}
-    borderRadius='4px'
-    />
-
+   <PseudoBox
+      border="1px"
+      borderColor="transparent"
+      margin='0.1rem'
+      rounded={4}
+    >
+      <Text color="transparent" fontSize={["2em", "2.75em"]} width={width}>カ</Text>
+    </PseudoBox>
   )
 }
