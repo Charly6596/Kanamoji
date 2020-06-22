@@ -25,7 +25,7 @@ function GamePage() {
       <Flex
         backgroundColor="gray.100"
         py={3}
-        borderRadius={['0', '0', '20px']}
+        borderRadius={['0', '0', '0px 0px 20px 20px']}
         flexDir="column"
         alignItems="center"
       >

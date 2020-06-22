@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
 import { StatsContainer } from '../containers/stats';
 import { useKana } from '../lib/kana-dict';
+import MainStack from '../components/main-stack';
 
 function StatsPage() {
   const stats = StatsContainer.useContainer();
@@ -12,8 +13,15 @@ function StatsPage() {
   const kanaDict = useKana();
 
   return (
-    <Stack align="center" paddingX={10}>
-      <Flex wrap="wrap" justifyContent="center">
+    <MainStack>
+      <Stack
+        backgroundColor="gray.200"
+        paddingY={5}
+        borderRadius={['0', '0', '20px']}
+        alignItems="center"
+        spacing={5}
+        >
+      <Stack justifyContent="center">
         <Box textAlign="center">
           <Text fontSize="2rem">Best character</Text>
           <Text fontSize="5em">{kanaDict.Kana[best.kanaId].char}</Text>
@@ -24,14 +32,15 @@ function StatsPage() {
           <Text fontSize="5em">{kanaDict.getById(worst.kanaId)?.char ?? "None yet"}</Text>
           <Text>Ratio: {(worst.timesCorrect / worst.totalTimes).toFixed(2)}</Text>
         </Box>
-        <Box>
-          <Text fontSize="2rem">Worst character</Text>
+        <Box textAlign="center">
+          <Text fontSize="2rem">Games</Text>
         </Box>
+      </Stack>
       <Link to={ROUTES.HOME}>
         <Button variantColor="green">Main page</Button>
       </Link>
-      </Flex>
     </Stack>
+    </MainStack>
   )
 }
 
