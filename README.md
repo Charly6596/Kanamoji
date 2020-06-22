@@ -1,4 +1,4 @@
-![banner](screenshots/banner.png)
+![banner](img/banner.png)
 # 仮名文字 (Kanamoji)
 WIP. Learn Japanese kana by repetition.
 
@@ -10,13 +10,13 @@ Currently working on the stats page in my free time.
 
 ## Screenshots
 ### Home page
-![home page](screenshots/1.png)
+![home page](img/1.png)
 
-![home page selection](screenshots/2.png)
+![home page selection](img/2.png)
 
 ### Game page
-![home page](screenshots/3.png)
+![home page](img/3.png)
 
-![home page](screenshots/4.png)
+![home page](img/4.png)
 
-![home page](screenshots/5.png)
+![home page](img/5.png)
