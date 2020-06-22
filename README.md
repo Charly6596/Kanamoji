@@ -1,3 +1,4 @@
+![banner](screenshots/banner.png)
 # 仮名文字 (Kanamoji)
 WIP. Learn Japanese kana by repetition.
 
