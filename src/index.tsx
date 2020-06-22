@@ -7,18 +7,21 @@ import { ThemeProvider, CSSReset, ColorModeProvider, theme } from '@chakra-ui/co
 import { ConfigContainer } from './containers/configuration';
 import { StatsContainer } from './containers/stats';
 import { GameContainer } from './containers/game';
+import { SelectModeContainer } from './containers/select-mode';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-        <CSSReset />
-        <ConfigContainer.Provider>
-          <StatsContainer.Provider>
-            <GameContainer.Provider>
+      <CSSReset />
+      <ConfigContainer.Provider>
+        <StatsContainer.Provider>
+          <GameContainer.Provider>
+            <SelectModeContainer.Provider>
               <App />
-            </GameContainer.Provider>
-          </StatsContainer.Provider>
-        </ConfigContainer.Provider>
+            </SelectModeContainer.Provider>
+          </GameContainer.Provider>
+        </StatsContainer.Provider>
+      </ConfigContainer.Provider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

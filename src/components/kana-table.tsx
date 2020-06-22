@@ -2,8 +2,9 @@ import React from 'react'
 import { Kana, useKana } from '../lib/kana-dict';
 import { KanaCheckbox } from './kana-checkbox';
 import { KanaCheckboxBox } from './kana-checkbox-box';
-import { Box, Checkbox } from '@chakra-ui/core';
+import { Box, Checkbox, Stack, Flex } from '@chakra-ui/core';
 import { ConfigContainer } from '../containers/configuration';
+import { SelectModeContainer } from '../containers/select-mode';
 
 type kanaGroup = "hiragana" | "katakana";
 
@@ -23,6 +24,7 @@ const groupBy = function (xs: any[], key: string | number): [Kana[]] {
 
 
 const KanaTable = (props: Props) => {
+  const selecting = SelectModeContainer.useContainer().selecting;
   const config = ConfigContainer.useContainer();
   const kana = useKana()
     .Kana.filter(k =>
@@ -34,13 +36,29 @@ const KanaTable = (props: Props) => {
   const ids = kana.map(k => k.id);
   const grouped = groupBy(kana, "column");
 
+  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value: number[] = JSON.parse(e.target.value);
+    e.target.checked ? config.enableKanas(value) : config.deleteKanas(value);
+  }
+
   const renderItems = () => {
     return grouped.map((g, i) => {
-      return <KanaCheckboxBox key={i}>
+      return <Stack direction="row" justify="center">
+       <KanaCheckboxBox key={i}>
         {g.map(k =>
           <KanaCheckbox kana={k} key={k.id} />
         )}
       </KanaCheckboxBox>
+      <Checkbox 
+        hidden={!selecting}
+        borderColor="black"
+        alignSelf="center"
+        variantColor="teal"
+        value={JSON.stringify(g.map(k => k.id))} 
+        onChange={onCheckboxChange} 
+        isChecked={config.areEnabled(g.map(k => k.id))} 
+        />
+      </Stack>
     })
   }
 

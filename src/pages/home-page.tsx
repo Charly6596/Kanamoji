@@ -4,22 +4,37 @@ import { Link as RouterLink } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
 import KanaTable from '../components/kana-table'
 import MainStack from '../components/main-stack'
+import { SelectModeContainer } from '../containers/select-mode'
+import { ConfigContainer } from '../containers/configuration'
 
 function HomePage() {
+  const select = SelectModeContainer.useContainer();
+  const anyEnabled = ConfigContainer.useContainer().get().size > 0
   return (
     <MainStack>
       <Stack
         backgroundColor="gray.200"
         paddingY={5}
-        borderRadius={['0', '0', '20px']}
+        borderRadius={['0', '0', '20px 10px 0 0']}
         alignItems="center"
         spacing={5}
       >
-        <Box position='fixed' bottom={2} right={2}>
-          <RouterLink to={ROUTES.GAME}>
-            <Button rounded="100%" height="4rem" width="4rem" variantColor='teal'>Start</Button>
-          </RouterLink>
-        </Box>
+        <Stack position='fixed' bottom={1} right={[3, 10]} alignItems="center" spacing={5}>
+          <Box>
+            <RouterLink to={ROUTES.GAME}>
+              <Button rounded="100%" height="4rem" width="4rem" variantColor='teal' isDisabled={!anyEnabled}>Start</Button>
+            </RouterLink>
+          </Box>
+          <Button
+            rounded="100%"
+            height="4rem"
+            width="4rem"
+            variantColor='teal'
+            onClick={select.toggle}
+          >
+            Select
+              </Button>
+        </Stack>
         <Tabs size='lg' isFitted>
           <TabList>
             <Tab _selected={{ borderBottomColor: 'teal.300', color: 'teal.300' }}>あ Hiragana</Tab>
