@@ -5,6 +5,7 @@ import { ROUTES } from '../constants/routes'
 import { StatsContainer } from '../containers/stats';
 import { useKana } from '../lib/kana-dict';
 import MainStack from '../components/main-stack';
+import AppFooter from '../components/app-footer';
 
 function StatsPage() {
   const stats = StatsContainer.useContainer();
@@ -13,6 +14,7 @@ function StatsPage() {
   const kanaDict = useKana();
 
   return (
+    <>
     <MainStack>
       <Stack
         backgroundColor="gray.200"
@@ -41,6 +43,8 @@ function StatsPage() {
       </Link>
     </Stack>
     </MainStack>
+    <AppFooter />
+    </>
   )
 }
 
