@@ -6,11 +6,13 @@ import KanaTable from '../components/kana-table'
 import MainStack from '../components/main-stack'
 import { SelectModeContainer } from '../containers/select-mode'
 import { ConfigContainer } from '../containers/configuration'
+import AppFooter from '../components/app-footer'
 
 function HomePage() {
   const select = SelectModeContainer.useContainer();
   const anyEnabled = ConfigContainer.useContainer().get().size > 0
   return (
+    <>
     <MainStack>
       <Stack
         backgroundColor="gray.200"
@@ -61,6 +63,8 @@ function HomePage() {
         </Tabs>
       </Stack>
     </MainStack>
+      <AppFooter />
+      </>
   )
 }
 
