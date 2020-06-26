@@ -40,7 +40,14 @@ function GamePage() {
             <Text fontSize="1.25rem" fontWeight="bold" color="red">{lastQ.shape}: {lastQ.char}</Text>
           </Stack>
         </Flex>
-        <Button _focus={{boxShadow: undefined}} ref={(b) => { b?.focus() }} onClick={() => setShowAnswer(false)}>Next</Button>
+        <Button
+          borderBottomLeftRadius={0}
+          borderBottomRightRadius={0}
+          _focus={{boxShadow: undefined}}
+          ref={(b) => { b?.focus() }}
+          onClick={() => setShowAnswer(false)}>
+            Next
+          </Button>
       </>
     }
 
