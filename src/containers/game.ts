@@ -38,11 +38,9 @@ function useGame() {
   };
 
   const finish = () => {
-    setGame(g => {
-      const game = finishGame(g);
-      stats.add(game);
-      return game;
-    });
+    const g = finishGame(game);
+    stats.add(g);
+    setGame(g);
   };
 
   useEffect(() => {
@@ -110,6 +108,7 @@ function isCorrect(input: string, game: Game) {
 function finishGame(game: Game): Game {
   return {
     ...game,
+    currentQuestion: game.currentQuestion + 1,
     finishedOn: new Date()
   };
 }
