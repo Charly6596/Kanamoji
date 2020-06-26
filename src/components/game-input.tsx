@@ -4,21 +4,25 @@ import { GameContainer } from '../containers/game';
 
 const GameInput = React.memo(() => {
   const [input, setInput] = useState('')
-  const inputRef = useRef<any>();
   const game = GameContainer.useContainer();
-
-  game.onError.current = () => {
-  };
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [inputRef])
+  const currLenght = game.questions[game.currentQuestion].romaji.length
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    sendAnswer();
+  }
+
+  const sendAnswer = () => {
+    if(input === '') { return; }
     game.answer(input);
     setInput('');
   }
+
+  useEffect(() => {
+    if(input.length === currLenght) {
+      sendAnswer()
+    }
+  }, [input, sendAnswer])
 
   return (
     <Box position={['relative']} bottom='0' width='100%'>
@@ -26,14 +30,14 @@ const GameInput = React.memo(() => {
         <Input
           background="gray.200"
           fontSize="1.5em"
-          ref={inputRef}
+          ref={(r: HTMLInputElement) => { r?.focus() }}
           placeholder="Enter your answer..."
           value={input}
           border={0}
           borderRadius={0}
           textAlign="center"
           focusBorderColor="transparent"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value.replace(/\s+/g, ''))}
         />
       </form>
     </Box>

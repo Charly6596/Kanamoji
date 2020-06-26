@@ -6,11 +6,12 @@ import { ROUTES } from '../constants/routes'
 
 interface Props {
   game: Game,
+  isOpen: boolean
 }
 
-function GameSummaryModal({ game }: Props) {
+function GameSummaryModal({ game, isOpen }: Props) {
   return (
-    <Modal closeOnOverlayClick={false} isOpen={game.finished} isCentered size={["xs", "md", "md"]}>
+    <Modal closeOnOverlayClick={false} isOpen={isOpen} isCentered size={["xs", "md", "md"]}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Game finished</ModalHeader>

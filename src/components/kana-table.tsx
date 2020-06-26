@@ -43,13 +43,14 @@ const KanaTable = (props: Props) => {
 
   const renderItems = () => {
     return grouped.map((g, i) => {
-      return <Stack direction="row" justify="center">
-       <KanaCheckboxBox key={i}>
+      return <Stack direction="row" justify="center" key={i}>
+       <KanaCheckboxBox key={'kcb' + i}>
         {g.map(k =>
           <KanaCheckbox kana={k} key={k.id} />
         )}
       </KanaCheckboxBox>
       <Checkbox 
+        key={'cb' + i}
         hidden={!selecting}
         borderColor="black"
         alignSelf="center"

@@ -2,6 +2,7 @@ import React, { Children } from "react"
 import { CheckboxProps, Checkbox, Flex, Box } from "@chakra-ui/core"
 import { KanaCheckboxProps, EmptyCheckbox } from "./kana-checkbox";
 import { ConfigContainer } from "../containers/configuration";
+import { uniqueId } from "lodash";
 
 interface Props {
   children: childType[];
@@ -27,7 +28,7 @@ export const KanaCheckboxBox: React.FC<Props> = ({ children }) => {
     if (child) {
       return cloneChild(child);
     }
-    return <EmptyCheckbox />
+    return <EmptyCheckbox key={uniqueId('emptycb')}/>
   });
 
   return (
