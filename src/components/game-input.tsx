@@ -6,6 +6,7 @@ const GameInput = React.memo(() => {
   const [input, setInput] = useState('')
   const inputRef = useRef<any>();
   const game = GameContainer.useContainer();
+  const currLenght = game.questions[game.currentQuestion].romaji.length
 
   game.onError.current = () => {
   };
@@ -16,9 +17,20 @@ const GameInput = React.memo(() => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    sendAnswer();
+  }
+
+  const sendAnswer = () => {
     game.answer(input);
     setInput('');
   }
+
+  useEffect(() => {
+    if(input.length === currLenght) {
+      sendAnswer()
+    }
+  }, [input, sendAnswer])
+
 
   return (
     <Box position={['relative']} bottom='0' width='100%'>
