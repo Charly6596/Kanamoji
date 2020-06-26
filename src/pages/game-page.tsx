@@ -17,9 +17,7 @@ function GamePage() {
     game.start();
   }, [])
 
-  if(game.questions.length === 0) {
-    return <Redirect to={ROUTES.HOME} />
-  }
+
   if (game.questions[game.currentQuestion] === undefined) {
     return <span>Loading...</span>;
   }
