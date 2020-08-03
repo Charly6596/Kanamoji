@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ThemeProvider, CSSReset, ColorModeProvider, theme } from '@chakra-ui/core';
-import { ConfigContainer } from './containers/configuration';
-import { StatsContainer } from './containers/stats';
-import { GameContainer } from './containers/game';
-import { SelectModeContainer } from './containers/select-mode';
+import { ThemeProvider, CSSReset, theme } from '@chakra-ui/core';
+import { ConfigContainer } from '@kanamoji/controllers';
+import { StatsContainer } from '@kanamoji/controllers';
+import { GameContainer } from '@kanamoji/controllers';
+import { SelectModeContainer } from '@kanamoji/controllers';
+import { initStorage } from '@kanamoji/controllers';
+
+initStorage(window.localStorage);
 
 const icons = {
   github: {

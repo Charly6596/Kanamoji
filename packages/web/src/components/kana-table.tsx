@@ -1,10 +1,10 @@
 import React from 'react'
-import { Kana, useKana } from '../lib/kana-dict';
+import { Kana, useKana } from '@kanamoji/controllers';
 import { KanaCheckbox } from './kana-checkbox';
 import { KanaCheckboxBox } from './kana-checkbox-box';
 import { Box, Checkbox, Stack, Flex } from '@chakra-ui/core';
-import { ConfigContainer } from '../containers/configuration';
-import { SelectModeContainer } from '../containers/select-mode';
+import { ConfigContainer } from '@kanamoji/controllers';
+import { SelectModeContainer } from '@kanamoji/controllers';
 
 type kanaGroup = "hiragana" | "katakana";
 

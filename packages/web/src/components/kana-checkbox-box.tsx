@@ -1,7 +1,7 @@
 import React, { Children } from "react"
 import { CheckboxProps, Checkbox, Flex, Box } from "@chakra-ui/core"
 import { KanaCheckboxProps, EmptyCheckbox } from "./kana-checkbox";
-import { ConfigContainer } from "../containers/configuration";
+import { ConfigContainer } from "@kanamoji/controllers";
 import { uniqueId } from "lodash";
 
 interface Props {

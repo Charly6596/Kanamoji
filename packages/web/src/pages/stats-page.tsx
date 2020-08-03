@@ -2,8 +2,8 @@ import React from 'react'
 import { Box, Text, Button, Stack, Flex } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
-import { StatsContainer } from '../containers/stats';
-import { useKana } from '../lib/kana-dict';
+import { StatsContainer } from '@kanamoji/controllers';
+import { useKana } from '@kanamoji/controllers';
 import MainStack from '../components/main-stack';
 import AppFooter from '../components/app-footer';
 

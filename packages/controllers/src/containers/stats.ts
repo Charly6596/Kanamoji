@@ -2,6 +2,7 @@ import { createContainer } from 'unstated-next'
 import { useState, useEffect } from 'react';
 import { Game } from '../model/Game';
 import { Kana } from '../lib/kana-dict';
+import { storage } from '../lib/storage';
 
 interface GameStat {
   correct: number;
@@ -15,15 +16,6 @@ interface KanaStat {
   timesCorrect: number;
   totalTimes: number;
   lastSeen: Date;
-}
-
-function getByKey(key: string) {
-  const json = localStorage.getItem(key);
-  if (json) {
-    const res = JSON.parse(json);
-    return res;
-  }
-  return [];
 }
 
 function getDefaultKana(id: number): KanaStat {
@@ -49,21 +41,51 @@ const kanaKey = 'kana_stats';
 const KANA_AMOUNT = 142;
 
 function useStats() {
-  const [gameStats, setGameStats] = useState<GameStat[]>(() => getByKey(gameKey))
+  const [gameStats, setGameStats] = useState<GameStat[]>([]);
 
-  const [kanaStats, setKanaStats] = useState<KanaStat[]>(() => getByKey(kanaKey));
+  const [kanaStats, setKanaStats] = useState<KanaStat[]>(getDefaultKanaStats());
 
   useEffect(() => {
+    async function loadGameStats() {
+      storage.load<GameStat[]>({key: gameKey}).then(res => {
+        setGameStats(res);
+      })
+    }
+
+    async function loadKanaStats() {
+       storage.load<KanaStat[]>({key: kanaKey}).then(res => {
+        setKanaStats(res);
+      })
+    }
+
+    loadGameStats();
+    loadKanaStats();
+  }, []);
+
+  useEffect(() => {
+    async function saveKanaStats() {
+      storage.save({
+        key: kanaKey,
+        data: kanaStats
+      })
+    }
+
     if (kanaStats.length < KANA_AMOUNT) {
       setKanaStats(getDefaultKanaStats());
     }
     else {
-      localStorage.setItem(kanaKey, JSON.stringify(kanaStats));
+      saveKanaStats();
     }
   }, [kanaStats])
 
   useEffect(() => {
-    localStorage.setItem(gameKey, JSON.stringify(gameStats));
+    async function saveGameStats() {
+      storage.save({
+        key: gameKey,
+        data: gameStats
+      })
+    }
+    saveGameStats();
   }, [gameStats])
 
   const add = (game: Game) => {

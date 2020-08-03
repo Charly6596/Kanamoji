@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Input, Box } from '@chakra-ui/core';
-import { GameContainer } from '../containers/game';
+import { GameContainer } from '@kanamoji/controllers';
 
 const GameInput = React.memo(() => {
   const [input, setInput] = useState('')

@@ -1,4 +1,4 @@
-import { Kana } from "../lib/kana-dict";
+import { Kana } from "@kanamoji/controllers";
 import { CheckboxProps, Text, Box, PseudoBox } from "@chakra-ui/core";
 import React from "react";
 

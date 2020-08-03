@@ -1,22 +1,35 @@
 import { useState, useEffect } from "react";
 import { createContainer } from "unstated-next";
+import { storage } from "../lib/storage";
 
 const key = 'hiragana'
 
 const defaultConfig = new Set<number>();
 
 function useConfiguration() {
-  const [config, setConfig] = useState<Set<number>>(() => {
-    const json = localStorage.getItem(key);
-    if (json) {
-      const res = JSON.parse(json);
-      return new Set<number>(res);
-    }
-    return defaultConfig;
-  })
+  const [config, setConfig] = useState<Set<number>>(defaultConfig);
 
   useEffect(() => {
-    localStorage.setItem('hiragana', JSON.stringify(Array.from(config.values())));
+    async function loadData() {
+      storage.load({key: key})
+      .then((res) => {
+        setConfig(new Set<number>(JSON.parse(res)));
+      });
+    }
+
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    async function saveData() {
+      storage.save({
+        key: key, 
+        data: JSON.stringify(Array.from(config.values()))
+      });
+    }
+
+    saveData();
+
     return () => {
     }
   }, [config])
