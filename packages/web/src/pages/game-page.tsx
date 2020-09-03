@@ -4,7 +4,7 @@ import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import CurrentMark from '../components/current-mark';
 import GameInput from '../components/game-input';
-import { GameContainer } from '../containers/game';
+import { GameContainer } from '@kanamoji/controllers';
 import GameSummaryModal from '../components/game-summary-modal';
 import MainStack from '../components/main-stack';
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Text, Button, Stack, Flex } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
-import { StatsContainer } from '../containers/stats';
+import { StatsContainer } from '@kanamoji/controllers';
 
 function GameSummaryPage() {
   const stats = StatsContainer.useContainer().get();

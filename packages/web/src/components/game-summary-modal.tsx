@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Game } from '../model/Game'
+import { Game } from '@kanamoji/controllers'
 import { Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure, Box } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
