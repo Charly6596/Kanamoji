@@ -6,7 +6,9 @@
     ],
     "scripts": {
         "web": "yarn build && yarn workspace @kanamoji/web start",
+        "webbuild": "yarn build && yarn workspace @kanamoji/web build",
         "app": "yarn build && yarn workspace @kanamoji/app start",
+        "appbuild": "yarn build && yarn workspace @kanamoji/app build",
         "build": "yarn workspace @kanamoji/controllers build"
     }
 }
